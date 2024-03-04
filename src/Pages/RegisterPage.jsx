@@ -1,56 +1,67 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Register } from "../apiCalls";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Register } from "../apis";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../App";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const register = async (e) => {
     e.preventDefault();
     try {
       const response = await Register(name, email, password);
       console.log(response);
-      alert("Registration successful now you can login");
+      setUser(response.data);
+      localStorage.setItem("userData", JSON.stringify(response.data));
+      toast.success("Registration successfull");
+      navigate("/");
     } catch (error) {
-      alert("Registration failed! try again");
+      toast.error(error.response.data.error);
     }
   };
 
   return (
-    <div className="mt-4 grow flex items-center justify-around">
-      <div className="mb-12">
-        <h1 className="text-4xl text-center mb-4 font-semibold">Register</h1>
-        <form className="max-w-md mx-auto" onSubmit={register}>
-          <input
-            type="text"
-            placeholder="John Doe"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="email"
-            placeholder="your@email.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button className="primary">Register</button>
-          <div className="text-center text-gray-500 py-2">
-            Already a member?{" "}
-            <Link to={"/login"} className="underline text-black">
-              Login
-            </Link>
-          </div>
-        </form>
+    <>
+      <div className="mt-4 grow flex items-center justify-around">
+        <div className="mb-12">
+          <h1 className="text-4xl text-center mb-4 font-semibold">Register</h1>
+          <form className="max-w-md mx-auto" onSubmit={register}>
+            <input
+              type="text"
+              placeholder="John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <input
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button className="primary">Register</button>
+            <div className="text-center text-gray-500 py-2">
+              Already a member?{" "}
+              <Link to={"/login"} className="underline text-black">
+                Login
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+      <ToastContainer />
+    </>
   );
 };
 
