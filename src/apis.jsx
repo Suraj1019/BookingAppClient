@@ -17,3 +17,9 @@ export const Login = async (email, password) => {
     password,
   });
 };
+
+export const uploadImageByLink = async (link) => {
+  return await axios.post(`/upload/uploadByLink`, {
+    link: link
+  });
+};
