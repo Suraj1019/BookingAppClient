@@ -15,7 +15,11 @@ const RegisterPage = () => {
   const register = async (e) => {
     e.preventDefault();
     try {
-      const response = await Register(name, email, password);
+      const response = await Register({
+        name: name,
+        email: email,
+        password: password,
+      });
       console.log(response);
       setUser(response.data);
       localStorage.setItem("userData", JSON.stringify(response.data));

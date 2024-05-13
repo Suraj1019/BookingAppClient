@@ -15,7 +15,7 @@ const LoginPage = () => {
   const login = async (e) => {
     e.preventDefault();
     try {
-      const response = await Login(email, password);
+      const response = await Login({ email: email, password: password });
       toast.success("Login Successfull");
       setUser(response.data);
       localStorage.setItem("userData", JSON.stringify(response.data));

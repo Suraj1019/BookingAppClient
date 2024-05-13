@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { uploadImageByLink } from "../apis";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { addPlace, uploadImage, uploadImageByLink } from "../apis";
+import { UserContext } from "../App";
 
 const PlacesPage = () => {
   const [title, setTitle] = useState("");
@@ -14,6 +15,8 @@ const PlacesPage = () => {
   const [checkOut, setCheckOut] = useState("");
   const [maxGuest, setMaxGuest] = useState("");
   const { action } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   const addImageByLink = async (e) => {
     e.preventDefault();
@@ -28,9 +31,49 @@ const PlacesPage = () => {
     setPhotoLink("");
   };
 
-  const uploadImage = (e) => {
-    const img = e.target.files;
-    console.log(img);
+  const handleImageChange = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      data.append("photos", files[i]);
+    }
+    const response = await uploadImage(data);
+    console.log(response);
+    setAddedPhotos((prev) => {
+      return [...prev, ...response.data];
+    });
+  };
+
+  const handlePerksChange = (e) => {
+    const { checked, name } = e.target;
+    if (checked) {
+      setPerks((prevPerks) => [...prevPerks, name]);
+    } else {
+      setPerks((prevPerks) => prevPerks.filter((item) => item !== name));
+    }
+  };
+
+  const addNewPlace = async (e) => {
+    e.preventDefault();
+    try {
+      const body = {
+        owener: user.userId,
+        title: title,
+        address: address,
+        addedPhotos: addedPhotos,
+        description: descrcription,
+        perks: perks,
+        extraInfo: extraInfo,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        maxGuests: maxGuest,
+      };
+      const res = await addPlace(body);
+      navigate("/account/places");
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -60,7 +103,7 @@ const PlacesPage = () => {
         </div>
       ) : (
         <div>
-          <form>
+          <form onSubmit={addNewPlace}>
             <h2 className="text-2xl mt-4 font-semibold">Title</h2>
             <p className="text-gray-500 text-sm">
               Title for your palce, should be short and catchy as in
@@ -99,18 +142,21 @@ const PlacesPage = () => {
             <div className="mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
               {addedPhotos.map((image) => {
                 return (
-                  <img
-                    src={`http://localhost:4000/uploads/${image}`}
-                    alt="place"
-                    className="rounded-2xl"
-                    key={image}
-                  />
+                  <div className="h-32 flex">
+                    <img
+                      src={`http://localhost:4000/uploads/${image}`}
+                      alt="place"
+                      className="rounded-2xl object-cover w-full"
+                      key={image}
+                    />
+                  </div>
                 );
               })}
-              <label className="flex gap-1 bg-transparent border justify-center items-center rounded-2xl text-2xl text-gray-500">
+              <label className="h-32 flex gap-1 bg-transparent border justify-center items-center rounded-2xl text-2xl text-gray-500">
                 <input
                   type="file"
-                  onChange={uploadImage}
+                  multiple
+                  onChange={handleImageChange}
                   className="hidden cursor-pointer"
                 />
                 <svg
@@ -140,7 +186,11 @@ const PlacesPage = () => {
             <p className="text-gray-500 text-sm">Select all the perks</p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 mt-2">
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name="wifi"
+                  onChange={handlePerksChange}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -158,7 +208,11 @@ const PlacesPage = () => {
                 <span>Wifi</span>
               </label>
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name="Free parking spot"
+                  onChange={handlePerksChange}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -176,7 +230,7 @@ const PlacesPage = () => {
                 <span>Free parking spot</span>
               </label>
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input type="checkbox" name="TV" onChange={handlePerksChange} />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -194,7 +248,11 @@ const PlacesPage = () => {
                 <span>TV</span>
               </label>
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name="Radio"
+                  onChange={handlePerksChange}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -212,7 +270,11 @@ const PlacesPage = () => {
                 <span>Radio</span>
               </label>
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name="Pets"
+                  onChange={handlePerksChange}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -230,7 +292,11 @@ const PlacesPage = () => {
                 <span>Pets</span>
               </label>
               <label className="border p-4 flex gap-2 rounded-2xl items-center cursor-pointer">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  name="Private Entrance"
+                  onChange={handlePerksChange}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
