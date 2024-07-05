@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const IndexPage = () => {
-    return (
-        <div>IndexPage</div>
-    )
-}
+  return <div>IndexPage cicd test</div>;
+};
 
-export default IndexPage
+export default IndexPage;
