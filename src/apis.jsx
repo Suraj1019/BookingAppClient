@@ -32,8 +32,12 @@ export const updatePlace = (data) => {
   return axios.post("/places/update", data);
 };
 
-export const getPlaces = (userId) => {
+export const getPlacesByUserId = (userId) => {
   return axios.get(`/places/getPlaces?userId=${userId}`);
+};
+
+export const getPlaces = () => {
+  return axios.get(`/places`);
 };
 
 export const getPlace = (id) => {

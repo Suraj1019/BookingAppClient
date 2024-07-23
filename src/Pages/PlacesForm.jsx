@@ -21,6 +21,7 @@ const PlacesFormPage = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuest, setMaxGuest] = useState("");
+  const [price, setPrice] = useState(0);
   const { user } = useContext(UserContext);
   const { id } = useParams();
 
@@ -75,6 +76,7 @@ const PlacesFormPage = () => {
         checkIn: checkIn,
         checkOut: checkOut,
         maxGuests: maxGuest,
+        price: price,
       };
       if (id) {
         await updatePlace({ ...body, id: id });
@@ -99,9 +101,20 @@ const PlacesFormPage = () => {
       setCheckIn(resp.data.checkIn);
       setCheckOut(resp.data.checkOut);
       setMaxGuest(resp.data.maxGuests);
+      setPrice(resp.data.price);
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const removePhoto = (ev, image) => {
+    ev.preventDefault();
+    setAddedPhotos([...addedPhotos.filter((photo) => photo !== image)]);
+  };
+
+  const setAsMain = (ev, image) => {
+    ev.preventDefault();
+    setAddedPhotos([image, ...addedPhotos.filter((photo) => photo !== image)]);
   };
 
   useEffect(() => {
@@ -151,13 +164,51 @@ const PlacesFormPage = () => {
         <div className="mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {addedPhotos.map((image, index) => {
             return (
-              <div className="h-32 flex" key={index}>
+              <div className="h-32 flex relative" key={index}>
                 <img
                   src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${image}`}
                   alt="place"
                   className="rounded-2xl object-cover w-full"
                   key={image}
                 />
+                <button
+                  onClick={(ev) => removePhoto(ev, image)}
+                  className="absolute bottom-1 right-1 text-white rounded-xl p-1 bg-black bg-opacity-70"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={(ev) => setAsMain(ev, image)}
+                  className="absolute bottom-1 left-1 text-white rounded-xl p-1 bg-black bg-opacity-70"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill={`${index === 0 ? "white" : "none"}`}
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+                    />
+                  </svg>
+                </button>
               </div>
             );
           })}
@@ -346,7 +397,7 @@ const PlacesFormPage = () => {
           Add check in out times,remember to have some time window for cleaning
           the room between guests
         </p>
-        <div className="grid sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <div>
             <h3 className="mt-2 -mb-1 font-semibold">Check in time</h3>
             <input
@@ -371,6 +422,14 @@ const PlacesFormPage = () => {
               type="number"
               value={maxGuest}
               onChange={(ev) => setMaxGuest(ev.target.value)}
+            />
+          </div>
+          <div>
+            <h3 className="mt-2 -mb-1 font-semibold">Price</h3>
+            <input
+              type="number"
+              value={price}
+              onChange={(ev) => setPrice(ev.target.value)}
             />
           </div>
         </div>

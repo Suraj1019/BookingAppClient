@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AccountNav from "./AccountNav";
 import { UserContext } from "../App";
-import { getPlaces } from "../apis";
+import { getPlacesByUserId } from "../apis";
 
 const PlacesPage = () => {
   const [places, setPlaces] = useState([]);
@@ -10,8 +10,7 @@ const PlacesPage = () => {
 
   const GetPlaces = async () => {
     try {
-      const resp = await getPlaces(user.userId);
-      // console.log(resp.data.data, "places");
+      const resp = await getPlacesByUserId(user.userId);
       setPlaces(resp.data.data);
     } catch (error) {
       console.log(error);
