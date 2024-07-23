@@ -1,7 +1,7 @@
 import React from "react";
 
-const IndexPage = () => {
+const Home = () => {
   return <div>IndexPage cicd test</div>;
 };
 
-export default IndexPage;
+export default Home;

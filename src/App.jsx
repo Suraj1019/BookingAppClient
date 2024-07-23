@@ -1,10 +1,13 @@
 import { Route, Routes } from "react-router-dom";
-import LoginPage from "./Pages/LoginPage";
+import LoginPage from "./Pages/Login";
 import Layout from "./Layout";
-import IndexPage from "./Pages/IndexPage";
-import RegisterPage from "./Pages/RegisterPage";
+import RegisterPage from "./Pages/Register";
 import { createContext, useEffect, useState } from "react";
-import AccountPage from "./Pages/AccountPage";
+import PlacesFormPage from "./Pages/PlacesForm";
+import PlacesPage from "./Pages/Places";
+import ProfilePage from "./Pages/Profile";
+import Home from "./Pages/Home";
+import Bookings from "./Components/Bookings";
 export const UserContext = createContext();
 
 function App() {
@@ -19,11 +22,14 @@ function App() {
     <UserContext.Provider value={{ user, setUser }}>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<IndexPage />} />
+          <Route index element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/account/:subpage?" element={<AccountPage />} />
-          <Route path="/account/:subpage?/:action?" element={<AccountPage />} />
+          <Route path="/account" element={<ProfilePage />} />
+          <Route path="/account/bookings" element={<Bookings />} />
+          <Route path="/account/places" element={<PlacesPage />} />
+          <Route path="/account/places/new" element={<PlacesFormPage />} />
+          <Route path="/account/places/:id" element={<PlacesFormPage />} />
         </Route>
       </Routes>
     </UserContext.Provider>

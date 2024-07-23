@@ -27,3 +27,15 @@ export const uploadImage = (data) => {
 export const addPlace = (data) => {
   return axios.post("/places/addPlace", data);
 };
+
+export const updatePlace = (data) => {
+  return axios.post("/places/update", data);
+};
+
+export const getPlaces = (userId) => {
+  return axios.get(`/places/getPlaces?userId=${userId}`);
+};
+
+export const getPlace = (id) => {
+  return axios.get(`/places/getPlace?id=${id}`);
+};
