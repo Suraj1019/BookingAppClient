@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
-import AccountNav from "./AccountNav";
+import AccountNav from "../Components/AccountNav";
 
 const ProfilePage = () => {
   const { user, setUser } = useContext(UserContext);

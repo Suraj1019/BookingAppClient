@@ -1,5 +1,5 @@
 import React from "react";
-import AccountNav from "../Pages/AccountNav";
+import AccountNav from "../Components/AccountNav";
 
 const Bookings = () => {
   return (

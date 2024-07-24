@@ -8,7 +8,7 @@ import {
 } from "../apis";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
-import AccountNav from "./AccountNav";
+import AccountNav from "../Components/AccountNav";
 
 const PlacesFormPage = () => {
   const [title, setTitle] = useState("");
@@ -89,24 +89,6 @@ const PlacesFormPage = () => {
     }
   };
 
-  const GetPlace = async () => {
-    try {
-      const resp = await getPlace(id);
-      setTitle(resp.data.title);
-      setAddress(resp.data.address);
-      setAddedPhotos(resp.data.photos);
-      setDescription(resp.data.description);
-      setPerks(resp.data.perks);
-      setExtraInfo(resp.data.extraInfo);
-      setCheckIn(resp.data.checkIn);
-      setCheckOut(resp.data.checkOut);
-      setMaxGuest(resp.data.maxGuests);
-      setPrice(resp.data.price);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const removePhoto = (ev, image) => {
     ev.preventDefault();
     setAddedPhotos([...addedPhotos.filter((photo) => photo !== image)]);
@@ -119,6 +101,23 @@ const PlacesFormPage = () => {
 
   useEffect(() => {
     if (id) {
+      const GetPlace = async () => {
+        try {
+          const resp = await getPlace(id);
+          setTitle(resp.data.title);
+          setAddress(resp.data.address);
+          setAddedPhotos(resp.data.photos);
+          setDescription(resp.data.description);
+          setPerks(resp.data.perks);
+          setExtraInfo(resp.data.extraInfo);
+          setCheckIn(resp.data.checkIn);
+          setCheckOut(resp.data.checkOut);
+          setMaxGuest(resp.data.maxGuests);
+          setPrice(resp.data.price);
+        } catch (error) {
+          console.log(error);
+        }
+      };
       GetPlace();
     }
   }, [id]);

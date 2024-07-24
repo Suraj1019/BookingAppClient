@@ -5,9 +5,10 @@ import RegisterPage from "./Pages/Register";
 import { createContext, useEffect, useState } from "react";
 import PlacesFormPage from "./Pages/PlacesForm";
 import PlacesPage from "./Pages/Places";
+import Bookings from "./Pages/Bookings";
 import ProfilePage from "./Pages/Profile";
 import Home from "./Pages/Home";
-import Bookings from "./Components/Bookings";
+import Place from "./Pages/Place";
 export const UserContext = createContext();
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/account/places" element={<PlacesPage />} />
           <Route path="/account/places/new" element={<PlacesFormPage />} />
           <Route path="/account/places/:id" element={<PlacesFormPage />} />
+          <Route path="/place/:id" element={<Place />} />
         </Route>
       </Routes>
     </UserContext.Provider>

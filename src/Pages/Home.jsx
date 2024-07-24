@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getPlaces } from "../apis";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
@@ -21,7 +22,7 @@ const Home = () => {
     <div className="mt-10 grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {places.length > 0 &&
         places.map((place, index) => (
-          <div key={index}>
+          <Link key={index} to={"place/" + place._id}>
             <div className="bg-gray-500 rounded-2xl flex mb-3">
               <img
                 src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[0]}`}
@@ -34,7 +35,7 @@ const Home = () => {
             <div className="mt-2 font-semibold">
               <span className="font-bold">${place.price}</span> per night
             </div>
-          </div>
+          </Link>
         ))}
     </div>
   );
