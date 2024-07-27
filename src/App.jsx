@@ -32,6 +32,7 @@ function App() {
           <Route path="/account/places/new" element={<PlacesFormPage />} />
           <Route path="/account/places/:id" element={<PlacesFormPage />} />
           <Route path="/place/:id" element={<Place />} />
+          <Route path="/account/bookings/:id/:bookingId" element={<Place />} />
         </Route>
       </Routes>
     </UserContext.Provider>

@@ -43,3 +43,15 @@ export const getPlaces = () => {
 export const getPlace = (id) => {
   return axios.get(`/places/getPlace?id=${id}`);
 };
+
+export const bookPlace = (data) => {
+  return axios.post(`/bookings/bookPlace`, data);
+};
+
+export const getBookings = (userId) => {
+  return axios.get(`/bookings/getBookings?userId=${userId}`);
+};
+
+export const getBookingDetails = (bookingId) => {
+  return axios.get(`/bookings/getBookingDetails?bookingId=${bookingId}`);
+};

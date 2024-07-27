@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPlace } from "../apis";
+import { getBookingDetails, getPlace } from "../apis";
 import BookingForm from "../Components/BookingForm";
 
 const Place = () => {
   const [place, setPlace] = useState([]);
+  const [bookingDetails, setBookingDetails] = useState();
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const { id } = useParams();
+  const { bookingId } = useParams();
+
+  const getNights = (checkIn, checkOut) => {
+    const day = new Date(checkOut).getTime() - new Date(checkIn).getTime();
+    return day / (1000 * 60 * 60 * 24);
+  };
 
   useEffect(() => {
     if (id) {
@@ -21,6 +28,21 @@ const Place = () => {
       GetPlace();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (bookingId) {
+      const GetPlace = async () => {
+        try {
+          const resp = await getBookingDetails(bookingId);
+          console.log(resp.data);
+          setBookingDetails(resp.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      GetPlace();
+    }
+  }, [bookingId]);
 
   if (showAllPhotos) {
     return (
@@ -71,6 +93,93 @@ const Place = () => {
       <div className="bg-gray-200 p-6 rounded-2xl">
         <div className="w-[70vw]">
           <h1 className="text-3xl font-semibold">{place.title} </h1>
+
+          {bookingId && bookingDetails && (
+            <div className="flex justify-between items-center bg-white rounded-lg py-4 px-8 my-4">
+              <div className="flex flex-col gap-3">
+                <h2 className="text-2xl font-semibold">Your Booking info</h2>
+                <div className="text-gray-500 flex text-md font-semibold gap-1">
+                  <div className="flex gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+                      />
+                    </svg>
+                    {getNights(bookingDetails.checkIn, bookingDetails.checkOut)}{" "}
+                    nights |
+                  </div>
+                  <div className="flex gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                      />
+                    </svg>
+                    <p>
+                      {new Date(bookingDetails.checkIn).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                  </div>
+                  &rarr;
+                  <div className="flex gap-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="size-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                      />
+                    </svg>
+                    <p>
+                      {new Date(bookingDetails.checkOut).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        }
+                      )}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-primary py-2 px-6 rounded-xl text-white  ">
+                <p className="text-lg font-semibold text-center">Total Price</p>
+                <p className="text-2xl font-semibold text-center">
+                  ${bookingDetails.price}{" "}
+                </p>
+              </div>
+            </div>
+          )}
           <a
             href={`https://map.google.com/?q=` + place.address}
             target="_blank"
