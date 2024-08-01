@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getBookingDetails, getPlace } from "../apis";
 import BookingForm from "../Components/BookingForm";
+import Loader from "../Components/Loader";
 
 const Place = () => {
   const [place, setPlace] = useState([]);
   const [bookingDetails, setBookingDetails] = useState();
   const [showAllPhotos, setShowAllPhotos] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const { id } = useParams();
   const { bookingId } = useParams();
 
@@ -19,10 +21,13 @@ const Place = () => {
     if (id) {
       const GetPlace = async () => {
         try {
+          setShowLoader(true);
           const resp = await getPlace(id);
           setPlace(resp.data);
         } catch (error) {
           console.log(error);
+        } finally {
+          setShowLoader(false);
         }
       };
       GetPlace();
@@ -33,11 +38,14 @@ const Place = () => {
     if (bookingId) {
       const GetPlace = async () => {
         try {
+          setShowLoader(true);
           const resp = await getBookingDetails(bookingId);
           console.log(resp.data);
           setBookingDetails(resp.data);
         } catch (error) {
           console.log(error);
+        } finally {
+          setShowLoader(false);
         }
       };
       GetPlace();
@@ -84,6 +92,7 @@ const Place = () => {
               </div>
             ))}
         </div>
+        {showLoader && <Loader />}
       </div>
     );
   }
@@ -294,6 +303,7 @@ const Place = () => {
         <h3 className="text-2xl  font-semibold">Extra Info</h3>
         <p className="my-2   ">{place.extraInfo}</p>
       </div>
+      {showLoader && <Loader />}
     </div>
   );
 };

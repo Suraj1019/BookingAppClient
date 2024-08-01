@@ -4,17 +4,20 @@ import { Register } from "../apis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../App";
+import Loader from "../Components/Loader";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showLoader, setShowLoader] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
   const register = async (e) => {
     e.preventDefault();
     try {
+      setShowLoader(true);
       const response = await Register({
         name: name,
         email: email,
@@ -27,6 +30,8 @@ const RegisterPage = () => {
       navigate("/");
     } catch (error) {
       toast.error(error.response.data.error);
+    } finally {
+      setShowLoader(false);
     }
   };
 
@@ -63,6 +68,7 @@ const RegisterPage = () => {
             </div>
           </form>
         </div>
+        {showLoader && <Loader />}
       </div>
       <ToastContainer />
     </>

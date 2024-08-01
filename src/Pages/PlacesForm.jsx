@@ -9,6 +9,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import AccountNav from "../Components/AccountNav";
+import Loader from "../Components/Loader";
 
 const PlacesFormPage = () => {
   const [title, setTitle] = useState("");
@@ -22,6 +23,7 @@ const PlacesFormPage = () => {
   const [checkOut, setCheckOut] = useState("");
   const [maxGuest, setMaxGuest] = useState("");
   const [price, setPrice] = useState(0);
+  const [showLoader, setShowLoader] = useState(false);
   const { user } = useContext(UserContext);
   const { id } = useParams();
 
@@ -101,6 +103,7 @@ const PlacesFormPage = () => {
 
   useEffect(() => {
     if (id) {
+      setShowLoader(true);
       const GetPlace = async () => {
         try {
           const resp = await getPlace(id);
@@ -116,6 +119,8 @@ const PlacesFormPage = () => {
           setPrice(resp.data.price);
         } catch (error) {
           console.log(error);
+        } finally {
+          setShowLoader(false);
         }
       };
       GetPlace();
@@ -434,6 +439,7 @@ const PlacesFormPage = () => {
         </div>
         <button className="primary font-semibold my-4">Save</button>
       </form>
+      {showLoader && <Loader />}
     </div>
   );
 };

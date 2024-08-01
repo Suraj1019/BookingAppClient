@@ -5,16 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../App";
+import Loader from "../Components/Loader";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showLoader, setShowLoader] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
   const login = async (e) => {
     e.preventDefault();
     try {
+      setShowLoader(false);
       const response = await Login({ email: email, password: password });
       toast.success("Login Successfull");
       setUser(response.data);
@@ -22,6 +25,8 @@ const LoginPage = () => {
       navigate("/");
     } catch (error) {
       toast.error(error.response.data);
+    } finally {
+      setShowLoader(false);
     }
   };
   return (
@@ -53,6 +58,7 @@ const LoginPage = () => {
             </div>
           </form>
         </div>
+        {showLoader && <Loader />}
       </div>
       <ToastContainer />
     </>

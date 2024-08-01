@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { getPlaces } from "../apis";
 import { Link } from "react-router-dom";
+import Loader from "../Components/Loader";
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
 
   const GetPlaces = async () => {
     try {
+      setShowLoader(true);
       const resp = await getPlaces();
       setPlaces(resp.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setShowLoader(false);
     }
   };
 
@@ -19,7 +24,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="mt-10 grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="mt-10 grid gap-x-6 gap-y-10 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
       {places.length > 0 &&
         places.map((place, index) => (
           <Link key={index} to={"place/" + place._id}>
@@ -37,6 +42,7 @@ const Home = () => {
             </div>
           </Link>
         ))}
+      {showLoader && <Loader />}
     </div>
   );
 };

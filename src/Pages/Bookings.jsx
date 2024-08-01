@@ -3,9 +3,11 @@ import AccountNav from "../Components/AccountNav";
 import { UserContext } from "../App";
 import { getBookings } from "../apis";
 import { Link } from "react-router-dom";
+import Loader from "../Components/Loader";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
+  const [showLoader, setShowLoader] = useState(false);
   const { user } = useContext(UserContext);
 
   const getNights = (checkIn, checkOut) => {
@@ -16,12 +18,14 @@ const Bookings = () => {
   useEffect(() => {
     const GetPlaces = async () => {
       try {
+        setShowLoader(true);
         const resp = await getBookings(user?.userId);
         setBookings(resp.data);
         // console.log(bookings, "bookings");
       } catch (error) {
         console.log(error);
       }
+      setShowLoader(false);
     };
     user.userId && GetPlaces();
   }, [user.userId]);
@@ -138,6 +142,7 @@ const Bookings = () => {
             );
           })}
       </div>
+      {showLoader && <Loader />}
     </div>
   );
 };

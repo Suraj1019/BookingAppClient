@@ -3,18 +3,23 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import { getPlacesByUserId } from "../apis";
 import AccountNav from "../Components/AccountNav";
+import Loader from "../Components/Loader";
 
 const PlacesPage = () => {
   const [places, setPlaces] = useState([]);
   const { user } = useContext(UserContext);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     const GetPlaces = async () => {
       try {
+        setShowLoader(true);
         const resp = await getPlacesByUserId(user.userId);
         setPlaces(resp.data.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setShowLoader(false);
       }
     };
     GetPlaces();
@@ -73,6 +78,7 @@ const PlacesPage = () => {
             );
           })}
       </div>
+      {showLoader && <Loader />}
     </div>
   );
 };
