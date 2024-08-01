@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import AccountNav from "../Components/AccountNav";
 import Loader from "../Components/Loader";
+import { toast } from "react-toastify";
 
 const PlacesFormPage = () => {
   const [title, setTitle] = useState("");
@@ -32,27 +33,50 @@ const PlacesFormPage = () => {
   const addImageByLink = async (e) => {
     e.preventDefault();
     try {
-      const image = await uploadImageByLink(photoLink);
-      setAddedPhotos((prev) => {
-        return [...prev, image.data];
-      });
+      setShowLoader(true);
+      const resp = await uploadImageByLink(photoLink);
+      if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+        setAddedPhotos((prev) => {
+          return [...prev, resp.data.data.newName];
+        });
+        toast.success("Image Uploaded Successfully");
+      } else {
+        throw new Error(
+          resp.message || resp?.data?.message || "Something went wrong"
+        );
+      }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setShowLoader(false);
     }
     setPhotoLink("");
   };
 
   const handleImageChange = async (e) => {
-    const files = e.target.files;
-    const data = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      data.append("photos", files[i]);
+    try {
+      setShowLoader(true);
+      const files = e.target.files;
+      const data = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        data.append("photos", files[i]);
+      }
+      const resp = await uploadImage(data);
+      if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+        setAddedPhotos((prev) => {
+          return [...prev, ...resp.data.data];
+        });
+        toast.success("Image Uploaded Successfully");
+      } else {
+        throw new Error(
+          resp.message || resp?.data?.message || "Something went wrong"
+        );
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setShowLoader(false);
     }
-    const response = await uploadImage(data);
-    console.log(response);
-    setAddedPhotos((prev) => {
-      return [...prev, ...response.data];
-    });
   };
 
   const handlePerksChange = (e) => {
@@ -81,13 +105,27 @@ const PlacesFormPage = () => {
         price: price,
       };
       if (id) {
-        await updatePlace({ ...body, id: id });
+        const resp = await updatePlace({ ...body, id: id });
+        if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+          toast.success("Place Updated Successfully");
+        } else {
+          throw new Error(
+            resp.message || resp?.data?.message || "Something went wrong"
+          );
+        }
       } else {
-        await addPlace(body);
+        const res = await addPlace(body);
+        if (res?.data?.status === 200 || res?.data?.status === 201) {
+          toast.success("Place Added Successfully");
+        } else {
+          throw new Error(
+            res.message || res?.data?.message || "Something went wrong"
+          );
+        }
       }
       navigate("/account/places");
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -107,18 +145,24 @@ const PlacesFormPage = () => {
       const GetPlace = async () => {
         try {
           const resp = await getPlace(id);
-          setTitle(resp.data.title);
-          setAddress(resp.data.address);
-          setAddedPhotos(resp.data.photos);
-          setDescription(resp.data.description);
-          setPerks(resp.data.perks);
-          setExtraInfo(resp.data.extraInfo);
-          setCheckIn(resp.data.checkIn);
-          setCheckOut(resp.data.checkOut);
-          setMaxGuest(resp.data.maxGuests);
-          setPrice(resp.data.price);
+          if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+            setTitle(resp.data.data.title);
+            setAddress(resp.data.data.address);
+            setAddedPhotos(resp.data.data.photos);
+            setDescription(resp.data.data.description);
+            setPerks(resp.data.data.perks);
+            setExtraInfo(resp.data.data.extraInfo);
+            setCheckIn(resp.data.data.checkIn);
+            setCheckOut(resp.data.data.checkOut);
+            setMaxGuest(resp.data.data.maxGuests);
+            setPrice(resp.data.data.price);
+          } else {
+            throw new Error(
+              resp.message || resp?.data?.message || "Something went wrong"
+            );
+          }
         } catch (error) {
-          console.log(error);
+          toast.error(error.message);
         } finally {
           setShowLoader(false);
         }

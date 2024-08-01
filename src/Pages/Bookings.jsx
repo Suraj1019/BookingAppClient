@@ -4,6 +4,7 @@ import { UserContext } from "../App";
 import { getBookings } from "../apis";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
+import { toast } from "react-toastify";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -20,10 +21,15 @@ const Bookings = () => {
       try {
         setShowLoader(true);
         const resp = await getBookings(user?.userId);
-        setBookings(resp.data);
-        // console.log(bookings, "bookings");
+        if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+          setBookings(resp.data.data);
+        } else {
+          throw new Error(
+            resp.message || resp?.data?.message || "Something went wrong"
+          );
+        }
       } catch (error) {
-        console.log(error);
+        toast.error(error.message);
       }
       setShowLoader(false);
     };

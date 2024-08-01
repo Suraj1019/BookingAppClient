@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import AccountNav from "../Components/AccountNav";
+import { toast } from "react-toastify";
 
 const ProfilePage = () => {
   const { user, setUser } = useContext(UserContext);
@@ -10,6 +11,7 @@ const ProfilePage = () => {
   const logout = () => {
     localStorage.clear();
     setUser();
+    toast.success("Logged Out");
     navigate("/login");
   };
   return (

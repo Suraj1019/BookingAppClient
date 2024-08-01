@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Register } from "../apis";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../App";
 import Loader from "../Components/Loader";
@@ -23,13 +23,18 @@ const RegisterPage = () => {
         email: email,
         password: password,
       });
-      console.log(response);
-      setUser(response.data);
-      localStorage.setItem("userData", JSON.stringify(response.data));
-      toast.success("Registration successfull");
-      navigate("/");
+      if (response?.data?.status === 200 || response?.data?.status === 201) {
+        setUser(response.data);
+        localStorage.setItem("userData", JSON.stringify(response.data.data));
+        toast.success("Registration successfull");
+        navigate("/");
+      } else {
+        throw new Error(
+          response.message || response?.data?.message || "Something went wrong"
+        );
+      }
     } catch (error) {
-      toast.error(error.response.data.error);
+      toast.error(error.message);
     } finally {
       setShowLoader(false);
     }
@@ -70,7 +75,6 @@ const RegisterPage = () => {
         </div>
         {showLoader && <Loader />}
       </div>
-      <ToastContainer />
     </>
   );
 };

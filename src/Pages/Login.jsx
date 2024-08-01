@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { Login } from "../apis";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../App";
 import Loader from "../Components/Loader";
@@ -19,12 +19,18 @@ const LoginPage = () => {
     try {
       setShowLoader(false);
       const response = await Login({ email: email, password: password });
-      toast.success("Login Successfull");
-      setUser(response.data);
-      localStorage.setItem("userData", JSON.stringify(response.data));
-      navigate("/");
+      if (response?.data?.status === 200 || response?.data?.status === 201) {
+        toast.success("Login Successfull");
+        setUser(response.data);
+        localStorage.setItem("userData", JSON.stringify(response.data.data));
+        navigate("/");
+      } else {
+        throw new Error(
+          response.message || response?.data?.message || "Something went wrong"
+        );
+      }
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error(error.message);
     } finally {
       setShowLoader(false);
     }
@@ -60,7 +66,6 @@ const LoginPage = () => {
         </div>
         {showLoader && <Loader />}
       </div>
-      <ToastContainer />
     </>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getPlaces } from "../apis";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [places, setPlaces] = useState([]);
@@ -11,9 +12,15 @@ const Home = () => {
     try {
       setShowLoader(true);
       const resp = await getPlaces();
-      setPlaces(resp.data);
+      if (resp?.data?.status === 200 || resp.data.status === 201) {
+        setPlaces(resp?.data?.data);
+      } else {
+        throw new Error(
+          resp.message || resp?.data?.message || "Something went wrong"
+        );
+      }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
     } finally {
       setShowLoader(false);
     }

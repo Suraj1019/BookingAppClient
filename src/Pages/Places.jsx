@@ -4,6 +4,7 @@ import { UserContext } from "../App";
 import { getPlacesByUserId } from "../apis";
 import AccountNav from "../Components/AccountNav";
 import Loader from "../Components/Loader";
+import { toast } from "react-toastify";
 
 const PlacesPage = () => {
   const [places, setPlaces] = useState([]);
@@ -15,14 +16,20 @@ const PlacesPage = () => {
       try {
         setShowLoader(true);
         const resp = await getPlacesByUserId(user.userId);
-        setPlaces(resp.data.data);
+        if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+          setPlaces(resp.data.data);
+        } else {
+          throw new Error(
+            resp.message || resp?.data?.message || "Something went wrong"
+          );
+        }
       } catch (error) {
-        console.log(error);
+        toast.error(error.message);
       } finally {
         setShowLoader(false);
       }
     };
-    GetPlaces();
+    user.userId && GetPlaces();
   }, [user.userId]);
 
   return (

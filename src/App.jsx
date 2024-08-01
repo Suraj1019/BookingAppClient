@@ -9,6 +9,7 @@ import Bookings from "./Pages/Bookings";
 import ProfilePage from "./Pages/Profile";
 import Home from "./Pages/Home";
 import Place from "./Pages/Place";
+import { ToastContainer } from "react-toastify";
 export const UserContext = createContext();
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/account/bookings/:id/:bookingId" element={<Place />} />
         </Route>
       </Routes>
+      <ToastContainer />
     </UserContext.Provider>
   );
 }

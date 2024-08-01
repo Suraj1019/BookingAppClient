@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getBookingDetails, getPlace } from "../apis";
 import BookingForm from "../Components/BookingForm";
 import Loader from "../Components/Loader";
+import { toast } from "react-toastify";
 
 const Place = () => {
   const [place, setPlace] = useState([]);
@@ -23,9 +24,15 @@ const Place = () => {
         try {
           setShowLoader(true);
           const resp = await getPlace(id);
-          setPlace(resp.data);
+          if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+            setPlace(resp.data.data);
+          } else {
+            throw new Error(
+              resp.message || resp?.data?.message || "Something went wrong"
+            );
+          }
         } catch (error) {
-          console.log(error);
+          toast.error(error.message);
         } finally {
           setShowLoader(false);
         }
@@ -40,10 +47,15 @@ const Place = () => {
         try {
           setShowLoader(true);
           const resp = await getBookingDetails(bookingId);
-          console.log(resp.data);
-          setBookingDetails(resp.data);
+          if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+            setBookingDetails(resp.data.data);
+          } else {
+            throw new Error(
+              resp.message || resp?.data?.message || "Something went wrong"
+            );
+          }
         } catch (error) {
-          console.log(error);
+          toast.error(error.message);
         } finally {
           setShowLoader(false);
         }

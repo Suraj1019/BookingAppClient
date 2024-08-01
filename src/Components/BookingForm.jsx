@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
 import { bookPlace } from "../apis";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "./Loader";
 
 const BookingForm = ({ place }) => {
   const [checkIn, setCheckIn] = useState("");
@@ -9,27 +11,38 @@ const BookingForm = ({ place }) => {
   const [maxGuest, setMaxGuest] = useState(1);
   const [phone, setPhone] = useState();
   const [days, setDays] = useState(0);
+  const [showLoader, setShowLoader] = useState(false);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
   const book = async () => {
-    const body = {
-      placeId: place._id,
-      userId: user.userId,
-      checkIn: checkIn,
-      checkOut: checkOut,
-      phone: phone,
-      userName: user.name,
-      price: place.price * days,
-    };
     try {
-      const res = await bookPlace(body);
-      console.log(res);
+      setShowLoader(true);
+      const body = {
+        placeId: place._id,
+        userId: user.userId,
+        checkIn: checkIn,
+        checkOut: checkOut,
+        phone: phone,
+        userName: user.name,
+        price: place.price * days,
+      };
+      const resp = await bookPlace(body);
+      if (resp?.data?.status === 200 || resp?.data?.status === 201) {
+        toast.success("Place Booked Successfully");
+      } else {
+        throw new Error(
+          resp.message || resp?.data?.message || "Something went wrong"
+        );
+      }
       navigate("/account/bookings");
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setShowLoader(false);
     }
   };
+
   useEffect(() => {
     const day = new Date(checkOut).getTime() - new Date(checkIn).getTime();
     setDays(day / (1000 * 60 * 60 * 24));
@@ -100,6 +113,7 @@ const BookingForm = ({ place }) => {
         Book
         {days > 0 && <span>: ${place.price * days}</span>}
       </button>
+      {showLoader && <Loader />}
     </div>
   );
 };
