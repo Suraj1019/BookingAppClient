@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
-import { getPlacesByUserId } from "../apis";
+import { getPlacesByUserId } from "../Services/apis";
 import AccountNav from "../Components/AccountNav";
 import Loader from "../Components/Loader";
 import { toast } from "react-toastify";

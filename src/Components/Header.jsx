@@ -32,7 +32,7 @@ const Header = () => {
         <p className="font-bold text-xl">airbnb</p>
       </div>
 
-      <div className="flex items-center gap-3 border rounded-full border-gray-300 py-2 px-3 shadow-md">
+      {/* <div className="flex items-center gap-3 border rounded-full border-gray-300 py-2 px-3 shadow-md">
         <div className="font-semibold text-sm">Anywhere</div>
         <div className="flex items-center text-gray-200 text-xl">|</div>
         <div className="font-semibold text-sm">Any week</div>
@@ -54,15 +54,15 @@ const Header = () => {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
 
       <div
-        className="flex gap-2 items-center border border-gray-500 rounded-full py-1 px-3 cursor-pointer"
+        className="flex gap-2 items-center border border-gray-500 rounded-full py-2 px-3 cursor-pointer"
         onClick={() => {
           navigate(user ? "/account" : "/login");
         }}
       >
-        <svg
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -75,7 +75,7 @@ const Header = () => {
             strokeLinejoin="round"
             d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
           />
-        </svg>
+        </svg> */}
         <div className="flex items-center p-1 bg-gray-500 rounded-full text-white">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ const Header = () => {
             />
           </svg>
         </div>
-        <div className="font-semibold">{user && user.name}</div>
+        <div className="font-semibold">{user && user?.name?.split(" ")[0]}</div>
       </div>
     </header>
   );

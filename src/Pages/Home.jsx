@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPlaces } from "../apis";
+import { getPlaces } from "../Services/apis";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { toast } from "react-toastify";

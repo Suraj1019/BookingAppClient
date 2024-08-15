@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import AccountNav from "../Components/AccountNav";
 import { UserContext } from "../App";
-import { getBookings } from "../apis";
+import { getBookings } from "../Services/apis";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { toast } from "react-toastify";

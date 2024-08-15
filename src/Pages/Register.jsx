@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Register } from "../apis";
+import { Register } from "../Services/apis";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../App";

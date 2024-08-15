@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
-import { bookPlace } from "../apis";
+import { bookPlace } from "../Services/apis";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
@@ -16,6 +16,11 @@ const BookingForm = ({ place }) => {
   const navigate = useNavigate();
 
   const book = async () => {
+    if (!user) {
+      navigate("/login");
+      toast.error("Login to continue");
+      return;
+    }
     try {
       setShowLoader(true);
       const body = {

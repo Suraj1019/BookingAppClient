@@ -5,7 +5,7 @@ import {
   updatePlace,
   uploadImage,
   uploadImageByLink,
-} from "../apis";
+} from "../Services/apis";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserContext } from "../App";
 import AccountNav from "../Components/AccountNav";

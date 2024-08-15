@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getBookingDetails, getPlace } from "../apis";
+import { getBookingDetails, getPlace } from "../Services/apis";
 import BookingForm from "../Components/BookingForm";
 import Loader from "../Components/Loader";
 import { toast } from "react-toastify";
