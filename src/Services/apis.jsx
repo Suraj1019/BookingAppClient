@@ -1,6 +1,3 @@
-// import axiosInstance from "axiosInstance";
-// axiosInstance.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
-// axiosInstance.defaults.withCredentials = true;
 import axiosInstance from "./interceptor";
 
 export const Register = (data) => {

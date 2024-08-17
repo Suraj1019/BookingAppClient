@@ -24,7 +24,7 @@ const RegisterPage = () => {
         password: password,
       });
       if (response?.data?.status === 200 || response?.data?.status === 201) {
-        setUser(response.data);
+        setUser(response.data.data);
         localStorage.setItem("userData", JSON.stringify(response.data.data));
         toast.success("Registration successfull");
         navigate("/");
