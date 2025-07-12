@@ -37,7 +37,7 @@ const Home = () => {
           <Link key={index} to={"place/" + place._id}>
             <div className="bg-gray-500 rounded-2xl flex mb-3">
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[0]}`}
+                src={place.photos[0]}
                 alt="place-img"
                 className="rounded-2xl aspect-square object-cover"
               />

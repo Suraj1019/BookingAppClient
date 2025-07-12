@@ -51,7 +51,7 @@ const Bookings = () => {
                 <div className="flex w-32 h-32 bg-gray-300  rounded-md">
                   {booking.photos.length > 0 && (
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${booking.photos[0]}`}
+                      src={booking.photos[0]}
                       alt="place-img"
                       className="object-cover rounded-md"
                     />

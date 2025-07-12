@@ -97,7 +97,7 @@ const Place = () => {
             place.photos.map((photo) => (
               <div className=" w-[70vw]  ">
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${photo}`}
+                  src={photo}
                   alt=""
                   className="object-cover h-full w-full"
                 />
@@ -236,7 +236,7 @@ const Place = () => {
           <div className="w-full h-full overflow-hidden">
             {place.photos && place?.photos[0] && (
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[0]}`}
+                src={place.photos[0]}
                 alt="place-0"
                 className="object-cover w-full h-full"
               />
@@ -245,28 +245,28 @@ const Place = () => {
           <div className="grid grid-cols-2 gap-2 w-full h-full">
             {place.photos && place.photos[1] && (
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[1]}`}
+                src={place.photos[1]}
                 alt="place-1"
                 className="aspect-square object-cover w-full h-full"
               />
             )}
             {place.photos && place.photos[2] && (
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[2]}`}
+                src={place.photos[2]}
                 alt="place-2"
                 className="aspect-square object-cover w-full h-full"
               />
             )}
             {place.photos && place.photos[3] && (
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[3]}`}
+                src={place.photos[3]}
                 alt="place-3"
                 className="aspect-square object-cover w-full h-full"
               />
             )}
             {place.photos && place.photos[4] && (
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[4]}`}
+                src={place.photos[4]}
                 alt="place-4"
                 className="aspect-square object-cover w-full h-full"
               />

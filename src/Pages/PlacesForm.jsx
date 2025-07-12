@@ -37,7 +37,7 @@ const PlacesFormPage = () => {
       const resp = await uploadImageByLink(photoLink);
       if (resp?.data?.status === 200 || resp?.data?.status === 201) {
         setAddedPhotos((prev) => {
-          return [...prev, resp.data.data.newName];
+          return [...prev, resp.data.data.url];
         });
         toast.success("Image Uploaded Successfully");
       } else {
@@ -214,7 +214,7 @@ const PlacesFormPage = () => {
             return (
               <div className="h-32 flex relative" key={index}>
                 <img
-                  src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${image}`}
+                  src={image}
                   alt="place"
                   className="rounded-2xl object-cover w-full"
                   key={image}

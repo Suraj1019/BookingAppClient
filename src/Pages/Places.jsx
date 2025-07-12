@@ -69,7 +69,7 @@ const PlacesPage = () => {
                 <div className="flex w-32 h-32 bg-gray-300 shrink-0 grow rounded-md">
                   {place.photos.length > 0 && (
                     <img
-                      src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${place.photos[0]}`}
+                      src={place.photos[0]}
                       alt="place-img"
                       className="object-cover rounded-md"
                     />
