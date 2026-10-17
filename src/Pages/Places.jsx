@@ -20,7 +20,7 @@ const PlacesPage = () => {
           setPlaces(resp.data.data);
         } else {
           throw new Error(
-            resp.message || resp?.data?.message || "Something went wrong"
+            resp.message || resp?.data?.message || "Something went wrong",
           );
         }
       } catch (error) {
@@ -57,34 +57,40 @@ const PlacesPage = () => {
           Add New Place
         </Link>
       </div>
-      <div className="mt-4 flex flex-col gap-6">
-        {places.length > 0 &&
-          places.map((place) => {
-            return (
-              <Link
-                to={"/account/places/" + place._id}
-                key={place._id}
-                className="flex items-center gap-4 bg-gray-300 p-4 rounded-2xl cursor-pointer"
-              >
-                <div className="flex w-32 h-32 bg-gray-300 shrink-0 grow rounded-md">
-                  {place.photos.length > 0 && (
-                    <img
-                      src={place.photos[0]}
-                      alt="place-img"
-                      className="object-cover rounded-md"
-                    />
-                  )}
-                </div>
-                <div className="grow-0 shrink">
-                  <h2 className="text-2xl font-semibold">{place.title}</h2>
-                  <p className="text-sm mt-2 font-semibold">
-                    {place.description}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-      </div>
+      {places?.length > 0 ? (
+        <div className="mt-4 flex flex-col gap-6">
+          {places.length > 0 &&
+            places.map((place) => {
+              return (
+                <Link
+                  to={"/account/places/" + place._id}
+                  key={place._id}
+                  className="flex items-center gap-4 bg-gray-300 p-4 rounded-2xl cursor-pointer"
+                >
+                  <div className="flex w-32 h-32 bg-gray-300 shrink-0 grow rounded-md">
+                    {place.photos.length > 0 && (
+                      <img
+                        src={place.photos[0]}
+                        alt="place-img"
+                        className="object-cover rounded-md"
+                      />
+                    )}
+                  </div>
+                  <div className="grow-0 shrink">
+                    <h2 className="text-2xl font-semibold">{place.title}</h2>
+                    <p className="text-sm mt-2 font-semibold">
+                      {place.description}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+        </div>
+      ) : (
+        <div className="flex items-center flex-col mt-16">
+          <p className="font-semibold">No accomodations found.</p>
+        </div>
+      )}
       {showLoader && <Loader />}
     </div>
   );

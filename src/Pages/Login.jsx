@@ -17,20 +17,18 @@ const LoginPage = () => {
   const login = async (e) => {
     e.preventDefault();
     try {
-      setShowLoader(false);
+      setShowLoader(true);
       const response = await Login({ email: email, password: password });
-      if (response?.data?.status === 200 || response?.data?.status === 201) {
-        toast.success("Login Successfull");
-        setUser(response.data.data);
-        localStorage.setItem("userData", JSON.stringify(response.data.data));
-        navigate("/");
-      } else {
-        throw new Error(
-          response.message || response?.data?.message || "Something went wrong"
-        );
-      }
+      toast.success("Login Successfull");
+      setUser(response.data.data);
+      localStorage.setItem("userData", JSON.stringify(response.data.data));
+      navigate("/");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
+      );
     } finally {
       setShowLoader(false);
     }
