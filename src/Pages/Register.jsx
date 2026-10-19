@@ -31,7 +31,7 @@ const RegisterPage = () => {
       toast.error(
         error?.response?.data?.message ||
           error.message ||
-          "Something went wrong",
+          "Something went wrong. Please try again.",
       );
     } finally {
       setShowLoader(false);

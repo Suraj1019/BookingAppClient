@@ -15,13 +15,16 @@ axiosInstance.interceptors.request.use((config) => {
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    if (response.data.status === 401 || response.data.status === 403) {
-      localStorage.removeItem("userData");
-      window.location = "/login";
-    }
     return response;
   },
   (error) => {
+    const status = error.response?.status;
+
+    if (status === 401 || status === 403) {
+      localStorage.removeItem("userData");
+      window.location.href = "/login";
+    }
+
     return Promise.reject(error);
   },
 );

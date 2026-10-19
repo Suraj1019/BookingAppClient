@@ -5,6 +5,9 @@ import { getBookings } from "../Services/apis";
 import { Link } from "react-router-dom";
 import Loader from "../Components/Loader";
 import { toast } from "react-toastify";
+import MoonIcon from "../Assets/MoonIcon";
+import CalenderIcon from "../Assets/CalenderIcon";
+import WalletIcon from "../Assets/WalletIcon";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -21,15 +24,13 @@ const Bookings = () => {
       try {
         setShowLoader(true);
         const resp = await getBookings(user?.userId);
-        if (resp?.data?.status === 200 || resp?.data?.status === 201) {
-          setBookings(resp.data.data);
-        } else {
-          throw new Error(
-            resp.message || resp?.data?.message || "Something went wrong",
-          );
-        }
+        setBookings(resp.data.data);
       } catch (error) {
-        toast.error(error.message);
+        toast.error(
+          error?.response?.data?.message ||
+            error.message ||
+            "Something went wrong. Please try again.",
+        );
       }
       setShowLoader(false);
     };
@@ -62,37 +63,14 @@ const Bookings = () => {
                     <h2 className="text-2xl font-semibold">{booking.title}</h2>
                     <div className="text-gray-500 flex text-md font-semibold gap-1">
                       <div className="flex gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
-                          />
-                        </svg>
-                        {getNights(booking.checkIn, booking.checkOut)} nights |
+                        <MoonIcon />
+                        <span>
+                          {getNights(booking.checkIn, booking.checkOut)} nights
+                          |
+                        </span>
                       </div>
                       <div className="flex gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                          />
-                        </svg>
+                        <CalenderIcon />
                         <p>
                           {new Date(booking.checkIn).toLocaleDateString(
                             "en-GB",
@@ -106,20 +84,7 @@ const Bookings = () => {
                       </div>
                       &rarr;
                       <div className="flex gap-1">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="size-6"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
-                          />
-                        </svg>
+                        <CalenderIcon />
                         <p>
                           {new Date(booking.checkOut).toLocaleDateString(
                             "en-GB",
@@ -133,22 +98,9 @@ const Bookings = () => {
                       </div>
                     </div>
                     <div className="flex flex-row items-center gap-1">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"
-                        />
-                      </svg>
+                      <WalletIcon />
                       <p className="text-xl font-semibold">
-                        Total Price: ${booking.price}{" "}
+                        Total Price: ₹{booking.price}{" "}
                       </p>
                     </div>
                   </div>

@@ -33,16 +33,14 @@ const BookingForm = ({ place }) => {
         price: place.price * days,
       };
       const resp = await bookPlace(body);
-      if (resp?.data?.status === 200 || resp?.data?.status === 201) {
-        toast.success("Place Booked Successfully");
-      } else {
-        throw new Error(
-          resp.message || resp?.data?.message || "Something went wrong"
-        );
-      }
+      toast.success(resp?.data?.message);
       navigate("/account/bookings");
     } catch (error) {
-      toast.error(error.message);
+      toast.error(
+        error?.response?.data?.message ||
+          error.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setShowLoader(false);
     }
@@ -56,7 +54,7 @@ const BookingForm = ({ place }) => {
   return (
     <div className="bg-white px-4 py-3 rounded-xl flex flex-col gap-2">
       <div className="text-center text-2xl font-semibold">
-        Price:${place.price}/per night
+        Price:₹{place?.price}/per night
       </div>
       <div className="border rounded-md border-2">
         <div className="flex justify-between gap-1">
@@ -100,23 +98,21 @@ const BookingForm = ({ place }) => {
             />
           </div>
         </div>
-        {days > 0 && (
-          <div className="p-2">
-            <label htmlFor="" className="text-sm font-semibold">
-              Phone No.
-            </label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(ev) => setPhone(ev.target.value)}
-              className="border "
-            />
-          </div>
-        )}
+        <div className="p-2">
+          <label htmlFor="" className="text-sm font-semibold">
+            Phone No.
+          </label>
+          <input
+            type="tel"
+            value={phone}
+            onChange={(ev) => setPhone(ev.target.value)}
+            className="border "
+          />
+        </div>
       </div>
       <button className="primary font-semibold" onClick={() => book()}>
         Book
-        {days > 0 && <span>: ${place.price * days}</span>}
+        {days > 0 && <span>: ₹{place.price * days}</span>}
       </button>
       {showLoader && <Loader />}
     </div>

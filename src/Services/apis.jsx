@@ -34,8 +34,10 @@ export const getPlacesByUserId = (userId) => {
   return axiosInstance.get(`/places/getPlaces?userId=${userId}`);
 };
 
-export const getPlaces = () => {
-  return axiosInstance.get(`/places`);
+export const getPlaces = (q = "", page = 1, limit = 8) => {
+  return axiosInstance.get("/places", {
+    params: { ...(q && { q }), page, limit },
+  });
 };
 
 export const getPlace = (id) => {
@@ -52,6 +54,6 @@ export const getBookings = (userId) => {
 
 export const getBookingDetails = (bookingId) => {
   return axiosInstance.get(
-    `/bookings/getBookingDetails?bookingId=${bookingId}`
+    `/bookings/getBookingDetails?bookingId=${bookingId}`,
   );
 };
