@@ -81,12 +81,19 @@ const PlacesPage = () => {
                       </button>
                     </div>
                     <p className="text-sm mt-2 font-semibold">
-                      {place.description.length > 1000
-                        ? `${place.description.slice(0, 1000)}... `
-                        : place.description}
-                      <button type="button" className="text-primary font-bold">
-                        more
-                      </button>
+                      {place.description.length > 1000 ? (
+                        <div>
+                          {place.description.slice(0, 1000)}...
+                          <button
+                            type="button"
+                            className="text-primary font-bold"
+                          >
+                            more
+                          </button>
+                        </div>
+                      ) : (
+                        place.description
+                      )}
                     </p>
                   </div>
                 </Link>

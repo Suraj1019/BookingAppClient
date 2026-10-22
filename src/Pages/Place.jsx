@@ -27,6 +27,13 @@ const Place = () => {
   const onDescClick = () => {
     setShowPopup(true);
   };
+  const formatTime = (time) => {
+    if (!time || !/^\d{1,2}:\d{2}$/.test(time)) return time || "";
+    const [h, m] = time.split(":").map(Number);
+    const period = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 || 12;
+    return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+  };
 
   useEffect(() => {
     if (id) {
@@ -230,8 +237,12 @@ const Place = () => {
       <div className="bg-gray-200 p-6 rounded-2xl mt-3 w-full">
         <h3 className="text-2xl font-semibold">Check in&out times,max guest</h3>
         <div className="flex justify-between mt-2">
-          <p className="font-semibold">Check In: {place?.checkIn} </p>
-          <p className="font-semibold">Check Out: {place?.checkOut}</p>
+          <p className="font-semibold">
+            Check In: {formatTime(place?.checkIn)}
+          </p>
+          <p className="font-semibold">
+            Check Out: {formatTime(place?.checkOut)}
+          </p>
           <p className="font-semibold">Max Guests: {place?.maxGuests}</p>
         </div>
         <h3 className="text-2xl font-semibold mt-3">Perks</h3>
