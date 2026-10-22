@@ -8,7 +8,6 @@ import LocationIcon from "../Assets/LocationIcon";
 import ImageIcon from "../Assets/ImageIcon";
 import MoonIcon from "../Assets/MoonIcon";
 import CalenderIcon from "../Assets/CalenderIcon";
-import CrossIcon from "../Assets/CrossIcon";
 import PhotoGallery from "../Components/PhotoGallery";
 import DescriptionPopup from "../Components/DescriptionPoup";
 
